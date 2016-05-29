@@ -1,0 +1,66 @@
+
+>:( type promotion
+
+bool bA = true;
+
+long lA = 3;
+
+print ' 3 plus true: '; println lA + bA;
+
+print ' true plus 3: '; println bA + lA;
+
+float fA = 2.0;
+
+print ' 2.0 + 3: ' ; println fA + lA;
+
+print ' 3 * 2.0 + 3: ' ; println lA * fA + lA;
+
+print ' true + 2.0: '; println bA + fA;
+
+<> vA(long a){println a;}
+
+print ' pass true instead of long: '; vA(bA);
+
+float vF(float a){return a;}
+
+print ' pass true instead of float: ';println  vF(bA);
+
+print ' pass long instead of float: '; println vF(lA);
+
+>:( break and continue statements
+
+long counter = 0;
+while(true){while(true){while(true){counter = counter + 1; if(counter < 2){continue;}
+println 'inner'; break;}
+if(counter < 3){continue;}
+println 'middle'; break;}
+println 'outer'; if(counter < 5){continue;}
+break;}
+
+>:( strings
+
+string str = 'thees ees ae streeng';
+
+println str;
+
+string strs = str;
+
+println strs;
+
+<> streee(string s){println s;}
+
+streee(strs);
+
+string strrrr(){return 'ddrrrr';}
+
+println strrrr();
+
+strs = strrrr();
+
+println strs;
+
+string tempstr(string s){println s; return 'deeerrr';}
+
+println tempstr(strrrr());
+
+

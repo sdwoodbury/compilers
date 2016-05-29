@@ -1,0 +1,235 @@
+.TH Assembly Generator "January 2015" "CMSC 431" "User Manuals"
+.
+.SH NAME
+Handicapped Compiler
+.BR This thing handles statements and functions. statements are composed of expressions. statements do: 
+.IP \(bu
+Variable declaration: 'string' ... 'long' ... 'float' ... 'bool' ...
+.IP \(bu
+Variable Assignemnt var = ...
+.IP \(bu
+Printing 'print' ... 'println' ...
+.IP \(bu
+Input for floats and longs 'read' variable
+.BR expressions are:
+.IP \(bu
+A variable name, long or float numeric value, or 'true' and 'false' for a boolean
+.IP \(bu
+add, subtract, multiply, divide, exponentiate, negate, or modulus for floats and longs
+.IP \(bu
+parenthesis are supported '()'
+.IP \(bu
+Boolean and ( && ), or ( || ) and not ( ! ) for boolean expressions
+.IP \(bu
+< > <= >= == != for long, float, and boolean
+.BR statements are also if(condition){statements} and while(condition){statements}
+.IP \(bu
+in {staements}, the brace and spacing syntax is as follows: {statement;+ (\n*|statement;*) statement;+}
+.BR function declarations:
+.IP \(bu
+return type (long, float, string, bool, or <> for void) right now, return statements are only to be used in non void functions. Void functions are treated as procedures. Non void functions are treated like an expression.
+.IP \(bu
+parameter list: )( for empty list, or (type name, type name, ...) 
+.IP \(bu
+declare with return type name (type name, type name, ...) {statement;+ (\n*|statement;*) statement;+}
+invoke with name (name or value...); or name)(;  values may be mathematical or boolean expressions
+.IP \(bu
+return statements - 'return ;' when put inide a function exits the function
+.
+.SH DESCRIPTION
+This language resembles a simplified version of C. This language is compiled
+to the x86_64 assembly language with the 
+.B PROJ3
+compiler, in the proj3 folder, from which an executable program can be assembled and linked using
+.BR nasm (1)
+and 
+.BR gcc (1)
+respectively.
+
+.P 
+Functionality:  
+.IP \(bu
+Mathematical operations (may not mix types)
+.IP \(bu
+Comparisons (may not mix types)
+.IP \(bu
+Boolean Logic (see description below)
+.IP \(bu
+String declaration, assignment, and re-assignment
+.IP \(bu
+Printing
+.IP \(bu
+Reading user input for longs and floats
+.IP \(bu
+conditional statements and loops (see below)
+.IP \(bu
+functions/procedures
+.IP \(bu
+Type promotion: bool to long, bool and long to float
+.IP \(bu
+break and continue
+.IP \(bu
+the compiler does error checking. it provides the line number for the error. If the parameter list is too small, a variable is re-declared or used before being declared, or types don't match, an error message will be printed in 'data.asm' and if the parameter list is too long, the compiler will seg fault and you will not get a message in the data.asm file. 
+.IP \(bu
+there are global and local variables. local variables may have the same name as global variables, but then you can't use the global variable within that scope. 
+.
+.SH LANGUAGE
+.SS Mathematical Operations
+The following mathematical operations are supported in decreasing order of 
+precedence. Expressions may be constructed from signed 64 bit integers, signed 64 bit floats or
+other mathematical expressions.
+.TP
+(expression)
+Parentheses. Override precedence of operators outside the parentheses. 
+.TP
+expression ** expression
+Integer exponentiation. Returns 1 if exponent is less than 1. 
+.TP
+~expression
+Negation. 
+.TP
+expression * expression
+Multiplication. Same precedence as division and modulus.
+.TP
+expression / expression
+Division. Same precedence as multiplication and modulus.
+.TP
+expression % expression
+Modulus. Same precedence as multiplication and division.
+.TP 
+expression + expression
+Addition. Same precedence as subtraction.
+.TP
+expression - expression
+Subtraction. Same precedence as addition.
+.TP
+break; does a break
+.TP
+continue; does a continue
+.
+
+.SH LANGUAGE
+.SS comparisons - all these expressoins return to a boolean type. works for booleans, longs, and double types, so long as the left and right sides match
+The following comparisons are supported in increasing order of 
+precedence.
+.TP
+expression == expression
+.TP
+expression != expression
+.TP
+expression > expression
+.TP 
+expression < expression
+.TP
+expression >= expression
+.TP
+expression <= expression
+.
+
+.SH LANGUAGE
+.SS Boolean Logic - the following boolean logic operators are listed in increasing order of precedence. the return type is boolean. the expressions must be of boolean type. Booleans must be assigned variables of either 'true' or 'false' or the value of another boolean variable or the return value of a comparison or the return value of a boolean logic expression. however, when printing, true is printed as 1 and false is printed as 0
+.TP
+expression && expression
+returns the conjunction
+.TP
+expression || expression
+returns the disjunction
+.TP
+! expression
+returns the opposite value of whatever the boolean expression is
+.
+
+.SH LANGUAGE
+.SS if statements - of the form if ( something with a boolean type ) { action }
+.TP
+actions can be an assignemnt, print, input, if or while. not a declaration.
+.TP 
+can have multiple actions. follows the form if ( ... ) {action 'newLine' action } ect. you may only put new lines between two actions, and not between an action and bracket, a parentheses and bracket, or an if and a parenthesis
+.TP 
+if statements may be nested with ifs and whiles. it gets messy. ex: if (...) { if (...) { action 'newLine' action ... } A* } here, A* can be a few things. If there is an action here, A is a new line and * is an action. the action may be another if statement or a while loop, and there may be more actions with new lines separating them. if there are no more actions, A* must be nothing, and the brackets must be on the same line. this pattern goes for nesting brackets as well
+
+.SH LANGUAGE
+.SS while loop - of the form while ( somethign with a boolean type ) { action }
+.TP
+new lines and bracket conventions are the same for while loops as they are for if statements
+
+.SH Syntax
+.IP \(bu
+everything except a function declaration or an if statement or while loop (things that end in } ) ends 
+with a semicolon ; multiple statements may appear on the same line if separated by semicolons
+.IP \(bu
+line breaks may occur between the end of one statemet and the start of another, but do note the previously mentioned conventions for statements occuring within curly braces --> {statement;+ (\n*|statement;*) statement;+}
+.IP \(bu
+Variable names can be combinations of upper case and lower case letters
+.IP \(bu
+Variables may be initalized with their declaration using the '=' operator
+.BR ex: long a = 5
+.IP \(bu
+All string data must have quotes around it. ex: string a = 'derrr'
+.IP \(bu
+Strings may be declared as a set of empty single quotes ''
+.IP \(bu
+You can declare a string without initalizing it and when it is printed, you will get (null)
+.IP \(bu
+Attempting to print without any variables or quotes, just a 'print \n' or the like, will compile but when you run the assembly code it will seg fault
+.IP \(bu
+Doing mathematical operations with undeclared variables treats those variables as having a value of zero
+.IP \(bu
+When performing user input, inputting a long for a float works; inputting a float for a long also works but the decimal is truncated
+.IP \(bu
+Comments are an angry face >:( and cancel out everything on the rest of that line after the angry face
+.IP \(bu
+You may print strings or mathematical expressions directly from the print statement. ex1: println 'string' ex2: println 3 ** 4 DONT PUT MULTIPLE PRINTSTAEMENTS WITH QUOTES ON THE SAME LINE
+.IP \(bu
+Initalize booleans to 'true' or 'false' or a variable or expression of boolean type. they get printed out as 1 for true and 0 for false 
+
+.SH Reserved Words
+.IP \(bu
+please do not use inappropriate language for the names of functions and variables.
+.IP \(bu
+println -prints something with a new line
+.IP \(bu
+print -prints something with no new line
+.IP \(bu
+long - declares a long data type
+.IP \(bu
+float - declares a data data type
+.IP \(bu
+bool - boolean type
+.IP \(bu
+string - declares a string data type
+.IP \(bu
+return - jumps to the end of the function
+.IP \(bu
+input - input stores user input in a variable. ex: 'long a' then 'input a'
+
+.SH LIMITATIONS
+.IP \(bu
+The compiler supports multiple expresisons. 
+.IP \(bu
+Newlines may not be present within the expression.
+.IP \(bu
+longs and floats may not be mixed
+.IP \(bu
+variables must be declared before use. however, variables may be initailzed in the declaration. variable names may be combinations of upper case and lower case letters
+.IP \(bu
+exponentiation of a negative base results in the expression evaluating to zero
+.IP \(bu
+if you raise a float, value of zero, to a negative exponent, you get infinity
+.IP \(bu
+you can't have single or double quotes or hit the enter key inside a quoted string
+.IP \(bu
+no type checking on the input statements
+.IP \(bu
+Comments only cancel out letters and whitespace, not symbols or numbers
+.IP \(bu
+Exponentiation between two variables, more than once, in an expression, seems to break this thing on GL. it may not on another computer
+.IP \(bu
+don't try to print out floats inside of a funciton or a procedure.
+.IP \(bu
+don't put double quotes anywhere in a string
+.IP \(bu
+THE BIGGEST LIMITATION OF ALL IS THE INTELLECT OF THE USER. YOU HAVE BEEN WARNED
+
+.SH AUTHOR
+Stuart Woodbury <yr45570@umbc.edu>
