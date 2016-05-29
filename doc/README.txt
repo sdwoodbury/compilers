@@ -33,4 +33,4 @@ FOR THIS PROJECT, I CLAIM THE FOLLOWING:
 
 ADDITTIONAL NOTES
 DONT PUT MULTIPLE PRINTSTATEMENTS WITH QUOTES ON THE SAME LINE
--also, don't put double quoted inside of strings. nasm will bitch about commas. 
+-also, don't put double quoted inside of strings. nasm will complain about commas. 
