@@ -1,0 +1,2 @@
+this was project was developed in 7 increments. for reference i have included previous tests. test.txt is for v7. anything else has its version appended.
+previous versions may not work because i may have changed the syntax. if that happend then check the parser.y file to learn the correct syntax for something. reading the syntax tree is not hard at all

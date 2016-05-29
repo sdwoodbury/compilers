@@ -19,8 +19,8 @@ tests:
 	mv test.txt tests
 	
 
-.PHONY: shit
-shit:
+.PHONY: stuff
+stuff:
 	cd src
 	mv test.txt ../tests
 	cd ..
